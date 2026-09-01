@@ -1,268 +1,321 @@
-# REHABAI PRO
+# RehabAI Pro
+
 ### AI-Powered Rehabilitation Intelligence Platform
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-18.3-61dafb.svg)](https://reactjs.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688.svg)](https://fastapi.tiangolo.com/)
-[![MediaPipe](https://img.shields.io/badge/MediaPipe-Pose%2033--Point-orange.svg)](https://developers.google.com/mediapipe)
-[![Three.js](https://img.shields.io/badge/Three.js-3D%20Spatial-black.svg)](https://threejs.org/)
-[![Status](https://img.shields.io/badge/Status-Production%20Prototype-success.svg)]()
-
-> **CLINICAL SAFETY DISCLAIMER**: RehabAI Pro is an AI-assisted movement analysis and rehabilitation logging software platform designed to assist physiotherapists and patients with exercise adherence and kinematic estimation. It does **NOT** provide medical diagnoses or replace evaluation by a licensed healthcare professional.
+[\TypeScript\](https://www.typescriptlang.org/) � [\React\](https://reactjs.org/) � [\FastAPI\](https://fastapi.tiangolo.com/) � [\Vite\](https://vitejs.dev/) � [\Vercel\](https://vercel.com)
 
 ---
 
-## 1. Project Overview & Architecture
+## ?? Clinical Disclaimer
 
-RehabAI Pro combines on-device monocular computer vision, biomechanical vector geometry, automated repetition state machine counting, bilateral symmetry analysis, range-of-motion (ROM) monitoring, and context-aware clinical coaching from **Nova** into a macOS/VisionPro-inspired spatial interface.
-
-```
-                  ┌───────────────────────────────────────────────────────────┐
-                  │                      USER / WEBCAM                        │
-                  └─────────────────────────────┬─────────────────────────────┘
-                                                │
-                                                ▼
-                  ┌───────────────────────────────────────────────────────────┐
-                  │            MediaPipe Pose Landmarker (33 Pts)             │
-                  └─────────────────────────────┬─────────────────────────────┘
-                                                │
-                                                ▼
-                  ┌───────────────────────────────────────────────────────────┐
-                  │        Vector Trigonometry Joint Angle Engine (10 Joints) │
-                  └──────┬──────────────────────┬──────────────────────┬──────┘
-                         │                      │                      │
-                         ▼                      ▼                      ▼
-        ┌─────────────────────────┐ ┌──────────────────────┐ ┌────────────────────────┐
-        │ Repetition State Machine│ │  Bilateral Symmetry  │ │ Range of Motion Engine │
-        │ (REST/ECC/INF/CON/DONE) │ │  (Δ Degrees & %)     │ │ (Min / Max / Peak ROM) │
-        └────────────┬────────────┘ └──────────┬───────────┘ └───────────┬────────────┘
-                     │                         │                         │
-                     └──────────────────┬──────┴─────────────────────────┘
-                                        ▼
-                  ┌───────────────────────────────────────────────────────────┐
-                  │          Composite Movement Quality Engine (0-100%)       │
-                  └─────────────────────┬─────────────────────────────────────┘
-                                        │
-                         ┌──────────────┴──────────────┐
-                         ▼                             ▼
-        ┌────────────────────────────────┐ ┌──────────────────────────────────────────┐
-        │   Live UI HUD & Audio Coach    │ │  FastAPI Backend / SQLite & PostgreSQL   │
-        └────────────────────────────────┘ └───────────────────┬──────────────────────┘
-                                                               │
-                                                               ▼
-                                           ┌──────────────────────────────────────────┐
-                                           │  Nova AI Assistant & PDF Report Service  │
-                                           └──────────────────────────────────────────┘
-```
+**RehabAI Pro is an AI-assisted movement analysis and rehabilitation logging software platform designed to assist physiotherapists and patients with exercise adherence and kinematic estimation. It does NOT provide medical diagnoses or replace evaluation by a licensed healthcare professional.**
 
 ---
 
-## 2. Complete Project Directory Structure
+## ?? Features
 
-```
-rehabai-pro/
-├── .env.example                     # Environment configuration template
-├── docker-compose.yml               # Multi-container full-stack orchestration
-├── Dockerfile                       # Frontend production container
-├── package.json                     # Frontend dependencies & scripts
-├── vite.config.ts                   # Vite bundler & backend proxy config
-├── tailwind.config.js               # Glassmorphism & spatial design system
-├── tsconfig.json                    # TypeScript strict compiler options
-├── index.html                       # HTML5 mount template & fonts
-├── run-dev.bat                      # Windows 1-click startup script
-│
-├── backend/
-│   ├── Dockerfile                   # Backend container definition
-│   ├── requirements.txt             # Python dependencies
-│   ├── app/
-│   │   ├── main.py                  # FastAPI app entry point & CORS
-│   │   ├── api/
-│   │   │   ├── auth.py              # JWT authentication & RBAC
-│   │   │   ├── patients.py          # Patient records CRUD & filters
-│   │   │   ├── exercises.py         # 10 clinical exercise protocols
-│   │   │   ├── plans.py             # Rehabilitation plan manager
-│   │   │   ├── sessions.py          # Session recording & rep-by-rep data
-│   │   │   ├── chat.py              # Nova AI clinical coach endpoints
-│   │   │   ├── reports.py           # Clinical PDF generation & export
-│   │   │   ├── progress.py          # Multi-range trend aggregation
-│   │   │   └── notifications.py     # System notifications center
-│   │   ├── db/
-│   │   │   ├── database.py          # SQLAlchemy SQLite / Postgres engine
-│   │   │   ├── models.py            # Relational database models
-│   │   │   └── seed.py              # Realistic clinical seed generator
-│   │   ├── schemas/                 # Pydantic validation models
-│   │   └── services/
-│   │       ├── ai_service.py        # Gemini GenAI + clinical rule engine
-│   │       └── report_service.py    # ReportLab PDF report builder
-│   └── tests/
-│       └── test_api.py              # Backend unit tests
-│
-└── src/
-    ├── main.tsx                     # React root mount
-    ├── App.tsx                      # App layout & 12-page router
-    ├── index.css                    # Glassmorphism, 3D perspectives, theme
-    ├── types/
-    │   └── index.ts                 # Complete TypeScript interfaces
-    ├── data/
-    │   ├── exercisesData.ts         # 10 clinical exercise definitions
-    │   └── initialData.ts           # Rich offline/demo mock dataset
-    ├── context/
-    │   ├── AuthContext.tsx          # Role switching & active patient
-    │   └── SessionContext.tsx       # Live CV exercise session state
-    ├── services/
-    │   ├── api.ts                   # Unified API client + demo mode resilience
-    │   └── poseService.ts           # MediaPipe Pose loader & canvas skeleton
-    ├── utils/
-    │   ├── angles.ts                # 3D vector geometry joint angle math
-    │   ├── repCounter.ts            # Hysteresis repetition state machine
-    │   ├── symmetry.ts              # Bilateral asymmetry engine
-    │   ├── scoring.ts               # Composite quality calculation
-    │   └── audioCoach.ts            # Web Speech API real-time voice cues
-    ├── components/
-    │   ├── 3d/
-    │   │   ├── NovaOrb3D.tsx        # 3D WebGL glowing AI orb with states
-    │   │   ├── ExerciseModelViewer3D.tsx # 3D animated anatomical mannequin
-    │   │   └── LivePose3D.tsx       # Rotatable 3D spatial skeleton space
-    │   ├── ai/
-    │   │   └── GlobalNovaWidget.tsx # Floating bottom-right 3D Nova assistant
-    │   ├── common/
-    │   │   ├── GlassCard.tsx        # Translucent glass panel
-    │   │   ├── Badge.tsx            # Status and telemetry tags
-    │   │   ├── MetricCard.tsx       # Biomechanical metric widgets
-    │   │   └── DisclaimerBanner.tsx # Non-diagnostic clinical notice
-    │   └── layout/
-    │       ├── Sidebar.tsx          # 12-item navigation & live system badges
-    │       └── Header.tsx           # Topbar with patient/role switcher
-    └── pages/
-        ├── Dashboard.tsx            # Analytics overview (NO camera)
-        ├── LiveAnalysis.tsx         # Computer vision workspace with camera
-        ├── ExerciseLibrary.tsx      # 10 exercises with 3D model previews
-        ├── PatientProfile.tsx       # Patient demographics & recovery record
-        ├── RehabilitationPlan.tsx   # Prescribed protocol builder
-        ├── AICoach.tsx              # Nova AI dedicated chat page
-        ├── Progress.tsx             # 7d/30d/90d/all interactive charts
-        ├── Sessions.tsx             # Completed session logs
-        ├── SessionDetail.tsx        # Rep-by-rep telemetry deep dive
-        ├── Reports.tsx              # Clinical PDF generator & preview
-        ├── TherapistDashboard.tsx   # Clinician patient stratification
-        ├── Settings.tsx             # Voice, camera & threshold settings
-        ├── AboutSafety.tsx          # Safety framework & vision pipeline
-        └── Auth.tsx                 # Login, register & demo quick switch
-```
+- **Webcam-Based Exercise Analysis** - Uses MediaPipe's 33-point pose detection for real-time form analysis
+- **AI Clinical Coach** - Nova, an intelligent coaching engine providing contextual feedback
+- **Bilateral Symmetry Analysis** - Compares left/right side movement patterns
+- **Range of Motion Tracking** - Monitors ROM progress over time
+- **Repetition Counting** - Automatic rep detection using movement state machines
+- **Session Management** - Logs detailed exercise sessions with metrics
+- **Rehabilitation Plans** - Patient-specific exercise programs
+- **Progress Reports** - Clinical-grade PDF reports with analytics
+- **Patient Dashboard** - Multi-patient management for therapists
+- **Real-Time 3D Visualization** - Three.js based 3D pose rendering
 
 ---
 
-## 3. Quick Start Guide
+## ??? Technology Stack
+
+### Frontend
+- **React 18.3** - UI framework
+- **TypeScript 5.7** - Type safety
+- **Vite 6.0** - Build tool and dev server
+- **Tailwind CSS 3.4** - Styling
+- **Three.js 0.170** - 3D graphics
+- **Recharts 2.15** - Data visualization
+- **MediaPipe** - Pose detection (via browser API)
+
+### Backend
+- **FastAPI 0.110** - Modern Python web framework
+- **SQLAlchemy 2.0** - ORM
+- **Pydantic 2.6** - Data validation
+- **Python-Jose** - JWT authentication
+- **Google Generative AI** - LLM integration (Nova coach)
+- **ReportLab** - PDF generation
+
+### Deployment
+- **Vercel** - Serverless hosting (frontend + API)
+- **SQLite** - Default database
+- **PostgreSQL** - Optional for persistent storage
+
+---
+
+## ?? Vercel Deployment (Recommended)
+
+### Quick Start
+1. Push this repository to GitHub
+2. Go to https://vercel.com/new
+3. Import this GitHub repository
+4. Vercel will automatically configure and deploy
+5. Your app will be live in < 1 minute
+
+### How It Works
+- **Frontend:** Built as static Vite app, served globally by Vercel CDN
+- **Backend:** FastAPI runs as serverless Python functions at /api/*
+- **Database:** SQLite by default (ephemeral) or connect PostgreSQL for persistence
+- **Single Deployment:** One GitHub push deploys everything
+
+### Environment Variables (Optional)
+Set in Vercel Dashboard ? Settings ? Environment Variables:
+
+\\\env
+AI_API_KEY=your_google_genai_key
+AI_MODEL=gemini-2.5-flash
+JWT_SECRET=your-secure-random-string
+DATABASE_URL=postgresql://... (if using PostgreSQL)
+\\\
+
+**Note:** If not set, defaults are used. The app works without these.
+
+---
+
+## ?? Local Development
 
 ### Prerequisites
-- **Node.js**: v18.0 or higher
-- **Python**: v3.10 or higher
-- **Webcam**: Standard built-in or USB camera
+- Node.js 18+
+- Python 3.9+
+- Git
 
-### Step 1: Install Frontend Dependencies
-```bash
+### Setup
+
+\\\ash
+# 1. Clone repository
+git clone https://github.com/Naveenrajdevops/rehev.git
+cd rehev
+
+# 2. Install dependencies
 npm install
-```
-
-### Step 2: Install Backend Dependencies
-```bash
-cd backend
-python -m venv .venv
-
-# On Windows:
-.venv\Scripts\activate
-# On macOS / Linux:
-source .venv/bin/activate
-
 pip install -r requirements.txt
-```
 
-### Step 3: Run the Application
+# 3. Copy environment template
+cp .env.example .env
+\\\
 
-**Option A: 1-Click Launch (Windows)**
-Double click `run-dev.bat` or run:
-```bat
-run-dev.bat
-```
+### Running the App
 
-**Option B: Separate Terminals**
-
-Terminal 1 (Backend FastAPI):
-```bash
-cd backend
-python -m uvicorn app.main:app --reload --port 8000
-```
-
-Terminal 2 (Frontend React):
-```bash
+**Option 1: Frontend Only (Demo Mode)**
+- API calls fall back to mock data
+\\\ash
 npm run dev
-```
+# Open http://localhost:5173
+\\\
 
-Open your browser to:
-- **Frontend Application**: `http://localhost:5173`
-- **Interactive Backend API Docs (Swagger)**: `http://localhost:8000/api/docs`
+**Option 2: Frontend + Backend (Full Stack)**
 
----
+Terminal 1 - Backend:
+\\\ash
+cd backend
+python -m uvicorn app.main:app --reload
+# API: http://localhost:8000
+# Docs: http://localhost:8000/api/docs
+\\\
 
-## 4. Demo Credentials & One-Click Login
+Terminal 2 - Frontend:
+\\\ash
+npm run dev
+# Open http://localhost:5173
+# Frontend proxies /api to localhost:8000
+\\\
 
-RehabAI Pro includes pre-seeded accounts:
+**Option 3: Docker Compose**
+\\\ash
+docker-compose up
+# Frontend: http://localhost:5173
+# Backend: http://localhost:8000
+\\\
 
-| Role | Email | Password | Pre-loaded Data |
-|---|---|---|---|
-| **Therapist (Clinician)** | `therapist@rehabai.io` | `password123` | Dr. Marcus Reynolds, DPT (5 patients, active clinic) |
-| **Patient** | `patient@rehabai.io` | `password123` | Eleanor Vance (Post-op ACL, 8 past sessions) |
-| **Administrator** | `admin@rehabai.io` | `password123` | Alex Rivera |
-
-*(Tip: On the Auth screen or Topbar, you can switch roles with a single click).*
-
----
-
-## 5. Enabling AI Chatbot (Google Gemini API)
-
-RehabAI Pro works **100% out-of-the-box in Demo / Offline Mode** with an intelligent clinical rule engine. To enable real-time Gemini LLM reasoning for Nova:
-
-1. Obtain an API Key from [Google AI Studio](https://aistudio.google.com/).
-2. Open your `.env` file or set environment variable:
-```env
-AI_API_KEY=your_gemini_api_key_here
-AI_MODEL=gemini-2.5-flash
-```
-3. Restart the backend. Nova will automatically utilize Gemini with structured patient and session context injection!
-
----
-
-## 6. Enabling PostgreSQL & Docker Deployment
-
-To run with PostgreSQL instead of default SQLite:
-
-```bash
-docker-compose up --build
-```
-This boots:
-- `rehabai-postgres`: PostgreSQL 16 on port `5432`
-- `rehabai-backend`: FastAPI on port `8000`
-- `rehabai-frontend`: Nginx + React on port `5173`
+### Building for Production
+\\\ash
+npm run build
+# Output: dist/ folder (ready for Vercel or any static host)
+\\\
 
 ---
 
-## 7. Computer Vision & Repetition Testing Guide
+## ?? Project Structure
 
-1. Navigate to **Live Analysis** from the sidebar.
-2. Click **Start Camera** and grant browser webcam permissions.
-3. Step back **2.5 to 3 meters** so your hips, knees, and feet are visible.
-4. Select **Squat Rehabilitation** (or any of the 10 exercises).
-5. Perform a controlled squat:
-   - **Descent (Eccentric)**: Knees bend past 120°.
-   - **Bottom (Inflection)**: Reach ~90–100° flexion.
-   - **Ascent (Concentric)**: Drive through heels to full standing lockout.
-6. The repetition counter will cleanly increment with audible voice encouragement (`"1, great form!"`), computing real-time symmetry and peak ROM.
-7. Click **Save & Complete Session** to persist the session and view the rep-by-rep audit!
+\\\
+rehev/
++-- api/                          # Vercel serverless handler
+�   +-- index.py                 # FastAPI app entry point
++-- src/                          # Frontend (React + TypeScript)
+�   +-- components/
+�   �   +-- 3d/                  # 3D visualization
+�   �   +-- ai/                  # AI coach components
+�   �   +-- common/              # Reusable components
+�   �   +-- layout/
+�   +-- pages/                   # Page components
+�   +-- services/                # API client
+�   +-- types/                   # TypeScript types
+�   +-- utils/                   # Utility functions
+�   +-- main.tsx
++-- backend/                      # FastAPI Backend
+�   +-- app/
+�   �   +-- main.py
+�   �   +-- api/                 # Route handlers
+�   �   +-- db/                  # Database layer
+�   �   +-- schemas/
+�   +-- requirements.txt
++-- vercel.json                  # Vercel configuration
++-- vite.config.ts              # Vite configuration
++-- package.json
++-- requirements.txt            # Python dependencies (root)
++-- .env.example
++-- README.md
+\\\
 
 ---
 
-## 8. Clinical Limitations & Disclosures
+## ?? Security
 
-- **Lighting & Occlusion**: Accurate landmark detection requires adequate ambient lighting and an unobstructed view of the target joints.
-- **Monocular Depth**: 3D joint angles are calculated via normalized monocular landmark projection. Slight variances may occur if camera positioning deviates significantly from the recommended 45° or front angles.
-- **Non-Diagnostic Scope**: All scores and advisories are algorithmic estimates designed for patient engagement and kinematic logging.
+### Environment Variables
+- **Never commit** \.env\ files with real values
+- **Always commit** \.env.example\ (template only)
+- On Vercel, set secrets in Dashboard ? Environment Variables
+
+### What's Automatically Excluded
+- \.env\ files (actual secrets)
+- \
+ode_modules/\, \env/\
+- \.git/\, \dist/\
+- Database files
+
+---
+
+## ?? API Documentation
+
+When running locally or deployed:
+- **Swagger UI:** \/api/docs\
+- **ReDoc:** \/api/redoc\
+- **OpenAPI:** \/api/openapi.json\
+
+### Key Endpoints
+\\\
+GET  /api/health              # Health check
+POST /api/auth/login          # Authentication
+GET  /api/patients            # List patients
+POST /api/sessions            # Log exercise
+GET  /api/exercises           # Exercise library
+POST /api/chat                # AI coach
+GET  /api/reports             # Generate reports
+\\\
+
+---
+
+## ?? Webcam & MediaPipe
+
+### How It Works
+1. App requests webcam access
+2. MediaPipe detects 33 body keypoints in real-time
+3. Angles and metrics calculated locally (no upload)
+4. Numerical data sent to backend for storage
+5. AI coach provides feedback
+
+### Privacy
+- Pose detection runs **100% in browser**
+- No video uploaded
+- Only pose keypoints sent to server
+- Works without internet (local analysis)
+
+### Browser Support
+- Chrome/Edge (best)
+- Firefox (good)
+- Safari 15+
+
+---
+
+## ?? AI Coach (Nova)
+
+### How to Enable
+1. Get API key from Google AI Studio (free): https://aistudio.google.com
+2. Set \AI_API_KEY\ environment variable (or in Vercel)
+3. App will use Claude/Gemini for coaching
+
+### Fallback
+- If no API key, app uses mock responses
+- All features still work
+
+### Privacy
+- Check your LLM provider's data retention policy
+- For clinical use, review compliance requirements
+
+---
+
+## ?? Testing Locally
+
+\\\ash
+# Check TypeScript
+npm run build
+
+# Backend (if running locally)
+cd backend
+pytest tests/
+
+# Manual testing
+npm run dev
+# Try: login, add patient, start exercise, check reports
+\\\
+
+---
+
+## ?? Database
+
+### SQLite (Default)
+- File: \ehabai.db\
+- Pros: No setup needed, works everywhere
+- Cons: Ephemeral on Vercel (data lost after deploy)
+
+### PostgreSQL (Production)
+- Set \DATABASE_URL=postgresql://...\
+- Data persists between deployments
+- Better for high concurrency
+
+---
+
+## ?? Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| **Webcam permission denied** | Check browser privacy settings, use HTTPS |
+| **API returns 404** | Backend not running locally, or Vercel not deployed yet |
+| **Build fails** | Run \
+pm install\ and check for TypeScript errors |
+| **Database errors** | Delete \ehabai.db\ to reset |
+| **Vercel deployment failed** | Check build logs in Vercel Dashboard |
+
+---
+
+## ?? Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+---
+
+## ?? License & Attribution
+
+- **MediaPipe** - Pose detection (Google, Apache 2.0)
+- **FastAPI** - Backend framework (MIT)
+- **React** - UI framework (MIT)
+- **Three.js** - 3D graphics (MIT)
+
+---
+
+**Status:** Ready for Vercel Deployment  
+**Version:** 1.0.0 (Vercel Edition)  
+**Last Updated:** 2026-09-01
